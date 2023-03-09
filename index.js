@@ -1,4 +1,4 @@
-const apiKey = "9069ea7df5255bddc76e81b66070ca9a";
+const apiKey = "Replace it with your api key";
 history.pushState(null, null, location.href);
 window.onpopstate = function () {
   history.go(1);
