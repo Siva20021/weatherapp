@@ -1,0 +1,158 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@200;400;600&display=swap");
+
+body {
+    margin: 0;
+    font-family: "Lato", sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    flex-direction: column;
+}
+input {
+    padding: 1rem;
+    
+    border: 2px solid white;
+    
+    background-color: black;
+    font-family: inherit;
+    margin: 20px;
+    min-width: 300px;
+    font-size: 1rem;
+    color:#fff;
+
+}
+span{
+    font-size: 14px;
+    font-family: inherit;
+}
+input:focus {
+    outline: none;
+}
+.weather {
+    text-align: center;
+    font-size: 2rem;
+}
+.weather h2 {
+    margin-bottom: 0;
+    display: flex;
+    align-items: center;
+}
+.container{
+    box-shadow: 0 10px 10px rgba(0, 0, 0, );
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap:40px;
+    width:400px;
+    background: white;
+    border-radius: 25px;
+    border:4px solid black;
+}
+.submitButton{
+    background: #43AFFC;
+    color:black;
+    font-size: 20px;
+    padding: 2px 20px;
+    border-radius: 10px;
+    height: 40px;
+    width: 140px;
+    border:2px solid black;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+.submitButton:hover {
+    background: #3182CE;
+    cursor: pointer;
+}
+
+.submitButton:active {
+    background: #1A365D;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.submitButton:focus {
+    outline: none;
+}
+.myLocation{
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    margin-top: 20px;
+    margin-left: 20px;
+    background: #43AFFC;
+    color:black;
+    font-size: 14px;
+    padding: 2px 20px;
+    border-radius: 10px;
+    height: 40px;
+    width: 140px;
+    border:2px solid black;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    cursor:pointer;
+
+}
+.weather-forecast h2{
+    color:white;
+    background-color:black;
+    width: 300px;
+}
+.myLocation:hover {
+    background: #3182CE;
+    cursor: pointer;
+    
+}
+
+.myLocation:active {
+    background: #1A365D;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+.weather-forecast {
+    display: none;
+}
+
+.weather-cards {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-gap: 20px;
+  }
+  
+  .weather-card {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .weather-card .day {
+    font-weight: bold;
+  }
+  
+  .weather-card .icon img {
+    max-width: 50px;
+    height: auto;
+  }
+  
+  .weather-card .temp {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  .logoutButton{
+    background: #43AFFC;
+    color:black;
+    font-size: 20px;
+    padding: 2px 20px;
+    border-radius: 10px;
+    height: 40px;
+    width: 140px;
+    border:2px solid black;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    cursor:pointer;
+    position:absolute;
+    top:0;
+    right:0;
+    margin-right: 20px;
+    margin-top: 20px;
+}
