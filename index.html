@@ -1,19 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Weather</title>
-        <link rel="stylesheet" type="text/css" href="style.css" />
-
-        <!-- Include jQuery first -->
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-        <!-- Then include Bootstrap -->
-        <script
-            src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
-        <style>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <!-- <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.css">
+        Include SweetAlert JS -->
+    <!-- <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script> -->
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+    <!-- Include jQuery first -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"
+            integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+    <!-- Then include Bootstrap -->
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.2.1/pnotify.css">
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.2.1/pnotify.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+    <style>
             body {
                 background-size: cover;
                 background-position: center;
@@ -24,7 +39,7 @@
             }
             
         </style>
-        <script>
+    <script>
             document.addEventListener("DOMContentLoaded", function(event) {
               
               let isLoggedIn = document.cookie.includes("userLoggedIn=true");
@@ -34,75 +49,150 @@
               if (!isLoggedIn) {
                 window.location.href = "login.html";
               }
+              
             });
+            function logout() {
+  // perform any necessary cleanup or reset actions
+  // such as clearing user data from local storage or resetting global variables
+
+  // redirect the user to the login page
+  // Get the current value of the userLoggedIn cookie
+let cookies = document.cookie.split(';');
+let userLoggedIn = cookies.find(cookie => cookie.trim().startsWith('userLoggedIn='));
+if (userLoggedIn) {
+  userLoggedIn = userLoggedIn.split('=')[1];
+}
+
+// Update the userLoggedIn cookie value to "false"
+document.cookie = "userLoggedIn=false";
+
+  window.location.href = "login.html";
+}
           </script>
-    </head>
-    <body>
+  </head>
+  <body>
 
-        <button id="myLocationBtn" class="myLocation">My location weather</button>
-        <button onclick="logout()" class="logoutButton">Logout</button>
-        <form class="container" id="form">
-            <input
-                type="text"
-                id="search"
-                placeholder="Location"
-                autocomplete="off"
-                />
-            <button class="submitButton" id="searchBtn">Search</button>
-            <div class="carousel-container" id="weather-container"></div>
-        </form>
-        <main id="main"></main>
-        <div class="weather-forecast">
-            <h2>7-Day Weather Forecast</h2>
-            <div class="weather-cards">
-                <div class="weather-card">
-                    <div class="day">Today</div>
-                    <div class="icon"><img src="" alt=""></div>
-                    <div class="description"></div>
-                    <div class="temp"></div>
-                </div>
-                <div class="weather-card">
-                    <div class="day">Tommorow</div>
-                    <div class="icon"><img src="" alt=""></div>
-                    <div class="description"></div>
-                    <div class="temp"></div>
-                </div>
-                <div class="weather-card">
-                    <div class="day">Day 3</div>
-                    <div class="icon"><img src="" alt=""></div>
-                    <div class="description"></div>
-                    <div class="temp"></div>
-                </div>
-                <div class="weather-card">
-                    <div class="day">Day 4</div>
-                    <div class="icon"><img src="" alt=""></div>
-                    <div class="description"></div>
-                    <div class="temp"></div>
-                </div>
-                <div class="weather-card">
-                    <div class="day">Day 5</div>
-                    <div class="icon"><img src="" alt=""></div>
-                    <div class="description"></div>
-                    <div class="temp"></div>
-                </div>
-                <div class="weather-card">
-                    <div class="day">Day 6</div>
-                    <div class="icon"><img src="" alt=""></div>
-                    <div class="description"></div>
-                    <div class="temp"></div>
-                </div>
-                <div class="weather-card">
-                    <div class="day">Day 7</div>
-                    <div class="icon"><img src="" alt=""></div>
-                    <div class="description"></div>
-                    <div class="temp"></div>
-                </div>
-
-                <!-- Repeat for days 2-7 -->
-            </div>
+    <button id="myLocationBtn" class="myLocation">My location weather</button>
+    <button class="logoutButton" onclick="openModal()">Profile</button>
+    <button onclick="requestNotificationPermission()" class="notifyButton">Enable
+      Notifications</button>
+    <form class="container" id="form">
+      <input
+        type="text"
+        id="search"
+        placeholder="Location"
+        autocomplete="off"
+        />
+      <button class="submitButton" id="searchBtn">Search</button>
+      <div class="carousel-container" id="weather-container"></div>
+    </form>
+    <main id="main"></main>
+    <div class="weather-forecast">
+      <h2>7-Day Weather Forecast</h2>
+      <div class="weather-cards">
+        <div class="weather-card">
+          <div class="day">Today</div>
+          <div class="icon"><img src="" alt=""></div>
+          <div class="description"></div>
+          <div class="temp"></div>
+        </div>
+        <div class="weather-card">
+          <div class="day">Tommorow</div>
+          <div class="icon"><img src="" alt=""></div>
+          <div class="description"></div>
+          <div class="temp"></div>
+        </div>
+        <div class="weather-card">
+          <div class="day">Day 3</div>
+          <div class="icon"><img src="" alt=""></div>
+          <div class="description"></div>
+          <div class="temp"></div>
+        </div>
+        <div class="weather-card">
+          <div class="day">Day 4</div>
+          <div class="icon"><img src="" alt=""></div>
+          <div class="description"></div>
+          <div class="temp"></div>
+        </div>
+        <div class="weather-card">
+          <div class="day">Day 5</div>
+          <div class="icon"><img src="" alt=""></div>
+          <div class="description"></div>
+          <div class="temp"></div>
+        </div>
+        <div class="weather-card">
+          <div class="day">Day 6</div>
+          <div class="icon"><img src="" alt=""></div>
+          <div class="description"></div>
+          <div class="temp"></div>
+        </div>
+        <div class="weather-card">
+          <div class="day">Day 7</div>
+          <div class="icon"><img src="" alt=""></div>
+          <div class="description"></div>
+          <div class="temp"></div>
         </div>
 
+      </div>
+    </div>
+    <!-- <button onclick="showNotify()">Show Notification</button> -->
+    <!-- Button to open the modal -->
 
-        <script src="index.js"></script>
-    </body>
+
+    <!-- The modal -->
+    <div id="myModal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <div class="model-body">
+          <p class="modal-heading">User Profile</p>
+          <div class="model-values">
+            <img src="./backgrounds/bg-1.jpg" class="model-image"
+              alt="A beautiful
+              image">
+            <div class="model-row">
+              <h1 class="model-value1">Name: </h1>
+              <h2 class="model-value2" id="UserName"></h2>
+            </div>
+            <div class="model-row">
+              <h1 class="model-value1">Email: </h1>
+              <h2 class="model-value2" id="UserEmail"></h2>
+            </div>
+            <div class="model-row">
+              <h1 class="model-value1">City1: </h1>
+              <h2 class="model-value2" id="Usercity1"></h2>
+            </div>
+            <div class="model-row">
+              <h1 class="model-value1">City2: </h1>
+              <h2 class="model-value2" id="Usercity2"></h2>
+            </div>
+            <div class="model-row">
+              <h1 class="model-value1">City3: </h1>
+              <h2 class="model-value2" id="Usercity3"></h2>
+            </div>
+            <button onclick="logout()">Logout</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/pnotify/3.2.1/pnotify.js"></script>
+    <script>
+
+// // console.log(email);
+// // console.log(name);
+// // console.log(city1);
+// // console.log(city2);
+// // console.log(city3);
+// console.log(cookieValue[0]); // prints 'test@gmail.com'
+// console.log(cookieValue[1]); // prints 'Sivaramakrishnan'
+// console.log(cookieValue[2]); // prints ''
+// console.log(cookieValue[3]); // prints ''
+// console.log(cookieValue[4]); 
+  </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="index.js"></script>
+  </body>
 </html>
