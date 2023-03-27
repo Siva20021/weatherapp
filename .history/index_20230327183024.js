@@ -143,6 +143,7 @@ function requestNotificationPermission() {
         if (permission === "granted") {
           Swal.fire("Notifications enabled!", "", "success");
           showNotification();
+          checkIfRainToday();
         } else {
           Swal.fire("Notifications denied", "", "error");
         }
@@ -202,28 +203,23 @@ async function showNotification() {
       timerProgressBar: true,
     });
   });
+  // checkIfRainToday();
+  // setInterval(checkWeatherAndAlert, 24 * 60 * 60 * 1000);
 }
 
-// Get the modal
 var modal = document.getElementById("myModal");
 
-// Get the button that opens the modal
 var btn = document.getElementsByTagName("button")[0];
 
-// Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
-
-// When the user clicks the button, open the modal
 function openModal() {
   modal.style.display = "block";
 }
 
-// When the user clicks on <span> (x), close the modal
 function closeModal() {
   modal.style.display = "none";
 }
 
-// When the user clicks anywhere outside of the modal, close it
 window.onclick = function (event) {
   if (event.target == modal) {
     modal.style.display = "none";
@@ -246,22 +242,62 @@ document.getElementById("Usercity1").textContent = cookieValue[2];
 document.getElementById("Usercity2").textContent = cookieValue[3];
 document.getElementById("Usercity3").textContent = cookieValue[4];
 
-const preferredCities = [cookieValue[2], cookieValue[3], cookieValue[4]];
-console.log(preferredCities);
-function checkWeatherAndAlert() {
-  preferredCities.forEach((city) => {
-    fetch(
-      `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        const isRaining = data.weather[0].main.toLowerCase().includes("rain");
-        if (isRaining) {
-          swal("Raining", `It's raining in ${city}!`, "warning");
-        }
-      })
-      .catch((error) => console.error(error));
+const preferredCities = ["Cochin", "Chennai", "Sydney"];
+
+// function checkWeatherAndAlert() {
+//   preferredCities.forEach((city) => {
+//     fetch(
+//       `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`
+//     )
+//       .then((response) => response.json())
+//       .then((data) => {
+//         const isRaining = data.weather[0].main.toLowerCase().includes("rain");
+//         console.log("Hello");
+//         console.log(isRaining);
+//         if (isRaining) {
+//           Swal.fire({
+//             title: "Notification title",
+//             text: `Its raining in ${city}°C and it is ${weatherCondition}`,
+//             icon: "warning",
+//             toast: true,
+//             position: "top-end",
+//             showConfirmButton: false,
+//             timerProgressBar: true,
+//           });
+//         }
+//       })
+//       .catch((error) => console.error(error));
+//   });
+// }
+
+async function checkIfRainToday() {
+  const preferredCities = ["Cochin", "Chennai", "Sydney"];
+
+  navigator.geolocation.getCurrentPosition((position) => {
+    // Call the OpenWeatherMap API for each preferred city
+    preferredCities.forEach((city) => {
+      const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+      fetch(apiUrl)
+        .then((response) => response.json())
+        .then((data) => {
+          const weatherCondition = data.weather[0].main.toLowerCase();
+          const temperature = data.main.temp;
+
+          if (weatherCondition.includes("rain")) {
+            // Swal.fire({
+            //   title: "Notification title",
+            //   text: `Its raining in ${city}°C and it is ${weatherCondition}`,
+            //   icon: "warning",
+            //   toast: true,
+            //   position: "top-end",
+            //   showConfirmButton: false,
+            //   timerProgressBar: true,
+            // });
+            alert("raining");
+          }
+        })
+        .catch((error) => console.error(error));
+    });
   });
 }
-
-setInterval(checkWeatherAndAlert, 24 * 60 * 60 * 1000);

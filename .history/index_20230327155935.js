@@ -143,7 +143,6 @@ function requestNotificationPermission() {
         if (permission === "granted") {
           Swal.fire("Notifications enabled!", "", "success");
           showNotification();
-          checkIfRainToday();
         } else {
           Swal.fire("Notifications denied", "", "error");
         }
@@ -203,7 +202,7 @@ async function showNotification() {
       timerProgressBar: true,
     });
   });
-  // checkIfRainToday();
+
   // setInterval(checkWeatherAndAlert, 24 * 60 * 60 * 1000);
 }
 
@@ -242,22 +241,22 @@ document.getElementById("Usercity1").textContent = cookieValue[2];
 document.getElementById("Usercity2").textContent = cookieValue[3];
 document.getElementById("Usercity3").textContent = cookieValue[4];
 
-async function checkIfRainToday() {
-  const preferredCities = ["Cochin", "Chennai", "Sydney"];
+const preferredCities = ["Cochin", "Chennai", "Sydney"];
 
-  navigator.geolocation.getCurrentPosition(async (position) => {
-    for (const city of preferredCities) {
-      const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
-
-      try {
-        const response = await fetch(apiUrl);
-        const data = await response.json();
-        const weatherCondition = data.weather[0].main.toLowerCase();
-
-        if (weatherCondition.includes("rain")) {
+function checkWeatherAndAlert() {
+  preferredCities.forEach((city) => {
+    fetch(
+      `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        const isRaining = data.weather[0].main.toLowerCase().includes("rain");
+        console.log("Hello");
+        console.log(isRaining);
+        if (isRaining) {
           Swal.fire({
             title: "Notification title",
-            text: `It's raining in ${city} (${data.main.temp}°C) and it is ${weatherCondition}`,
+            text: `Its raining in ${city}°C and it is ${weatherCondition}`,
             icon: "warning",
             toast: true,
             position: "top-end",
@@ -265,9 +264,7 @@ async function checkIfRainToday() {
             timerProgressBar: true,
           });
         }
-      } catch (error) {
-        console.error(error);
-      }
-    }
+      })
+      .catch((error) => console.error(error));
   });
 }

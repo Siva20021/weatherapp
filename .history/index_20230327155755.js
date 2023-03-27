@@ -202,28 +202,23 @@ async function showNotification() {
       timerProgressBar: true,
     });
   });
+
+  // setInterval(checkWeatherAndAlert, 24 * 60 * 60 * 1000);
 }
 
-// Get the modal
 var modal = document.getElementById("myModal");
 
-// Get the button that opens the modal
 var btn = document.getElementsByTagName("button")[0];
 
-// Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
-
-// When the user clicks the button, open the modal
 function openModal() {
   modal.style.display = "block";
 }
 
-// When the user clicks on <span> (x), close the modal
 function closeModal() {
   modal.style.display = "none";
 }
 
-// When the user clicks anywhere outside of the modal, close it
 window.onclick = function (event) {
   if (event.target == modal) {
     modal.style.display = "none";
@@ -246,8 +241,8 @@ document.getElementById("Usercity1").textContent = cookieValue[2];
 document.getElementById("Usercity2").textContent = cookieValue[3];
 document.getElementById("Usercity3").textContent = cookieValue[4];
 
-const preferredCities = [cookieValue[2], cookieValue[3], cookieValue[4]];
-console.log(preferredCities);
+const preferredCities = ["Cochin", "Chennai", "Sydney"];
+
 function checkWeatherAndAlert() {
   preferredCities.forEach((city) => {
     fetch(
@@ -258,6 +253,7 @@ function checkWeatherAndAlert() {
         const isRaining = data.weather[0].main.toLowerCase().includes("rain");
         const w = data.weather[0].main.toLowerCase();
         console.log(w);
+        console.log(isRaining);
         if (isRaining) {
           Swal.fire({
             title: "Notification title",
@@ -273,5 +269,3 @@ function checkWeatherAndAlert() {
       .catch((error) => console.error(error));
   });
 }
-
-setInterval(checkWeatherAndAlert, 24 * 60 * 60 * 1000);

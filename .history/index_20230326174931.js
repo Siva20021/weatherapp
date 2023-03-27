@@ -246,7 +246,7 @@ document.getElementById("Usercity1").textContent = cookieValue[2];
 document.getElementById("Usercity2").textContent = cookieValue[3];
 document.getElementById("Usercity3").textContent = cookieValue[4];
 
-const preferredCities = [cookieValue[2], cookieValue[3], cookieValue[4]];
+const preferredCities = ["Cochin", "Chennai", "Mumbai"];
 console.log(preferredCities);
 function checkWeatherAndAlert() {
   preferredCities.forEach((city) => {

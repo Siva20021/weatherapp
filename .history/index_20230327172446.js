@@ -143,7 +143,6 @@ function requestNotificationPermission() {
         if (permission === "granted") {
           Swal.fire("Notifications enabled!", "", "success");
           showNotification();
-          checkIfRainToday();
         } else {
           Swal.fire("Notifications denied", "", "error");
         }
@@ -154,6 +153,95 @@ function requestNotificationPermission() {
   });
 }
 console.log(getWeatherByMyLocation);
+
+// async function showNotification() {
+//   navigator.geolocation.getCurrentPosition(async (position) => {
+//     const { latitude, longitude } = position.coords;
+//     const resp = await fetch(
+//       `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}`
+//     );
+//     const respData = await resp.json();
+//     const temp = Ktoc(respData.main.temp);
+
+//     let weatherCondition = "";
+//     respData.weather.forEach((condition) => {
+//       if (condition.main === "Rain") {
+//         weatherCondition = "rainy";
+//         Swal.fire({
+//           title: "Notification title",
+//           text: `The current temperature is ${temp}°C and it is ${weatherCondition}`,
+//           icon: "success",
+//           toast: true,
+//           position: "top-end",
+//           showConfirmButton: false,
+//           timerProgressBar: true,
+//         });
+//       } else if (condition.main === "Drizzle") {
+//         weatherCondition = "drizzling";
+//         Swal.fire({
+//           title: "Notification title",
+//           text: `The current temperature is ${temp}°C and it is ${weatherCondition}`,
+//           icon: "success",
+//           toast: true,
+//           position: "top-end",
+//           showConfirmButton: false,
+//           timerProgressBar: true,
+//         });
+//       } else {
+//         weatherCondition = "Fine";
+//       }
+//     });
+
+//     Swal.fire({
+//       title: "Notification title",
+//       text: `The current temperature is ${temp}°C and it is ${weatherCondition}`,
+//       icon: "success",
+//       toast: true,
+//       position: "top-end",
+//       showConfirmButton: false,
+//       timerProgressBar: true,
+//     });
+//   });
+//   // checkIfRainToday();
+//   // setInterval(checkWeatherAndAlert, 24 * 60 * 60 * 1000);
+// }
+
+var modal = document.getElementById("myModal");
+
+var btn = document.getElementsByTagName("button")[0];
+
+var span = document.getElementsByClassName("close")[0];
+function openModal() {
+  modal.style.display = "block";
+}
+
+function closeModal() {
+  modal.style.display = "none";
+}
+
+window.onclick = function (event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+};
+
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) {
+    const cookieValue = parts.pop().split(";").shift();
+    return cookieValue.split(",");
+  }
+}
+
+const cookieValue = getCookie("access_token");
+document.getElementById("UserName").textContent = cookieValue[0];
+document.getElementById("UserEmail").textContent = cookieValue[1];
+document.getElementById("Usercity1").textContent = cookieValue[2];
+document.getElementById("Usercity2").textContent = cookieValue[3];
+document.getElementById("Usercity3").textContent = cookieValue[4];
+
+const preferredCities = ["Cochin", "Chennai", "Sydney"];
 
 async function showNotification() {
   navigator.geolocation.getCurrentPosition(async (position) => {
@@ -193,81 +281,39 @@ async function showNotification() {
       }
     });
 
-    Swal.fire({
-      title: "Notification title",
-      text: `The current temperature is ${temp}°C and it is ${weatherCondition}`,
-      icon: "success",
-      toast: true,
-      position: "top-end",
-      showConfirmButton: false,
-      timerProgressBar: true,
-    });
+    // Call checkIfRainToday() function
+    checkIfRainToday();
   });
-  // checkIfRainToday();
-  // setInterval(checkWeatherAndAlert, 24 * 60 * 60 * 1000);
 }
-
-var modal = document.getElementById("myModal");
-
-var btn = document.getElementsByTagName("button")[0];
-
-var span = document.getElementsByClassName("close")[0];
-function openModal() {
-  modal.style.display = "block";
-}
-
-function closeModal() {
-  modal.style.display = "none";
-}
-
-window.onclick = function (event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-};
-
-function getCookie(name) {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) {
-    const cookieValue = parts.pop().split(";").shift();
-    return cookieValue.split(",");
-  }
-}
-
-const cookieValue = getCookie("access_token");
-document.getElementById("UserName").textContent = cookieValue[0];
-document.getElementById("UserEmail").textContent = cookieValue[1];
-document.getElementById("Usercity1").textContent = cookieValue[2];
-document.getElementById("Usercity2").textContent = cookieValue[3];
-document.getElementById("Usercity3").textContent = cookieValue[4];
 
 async function checkIfRainToday() {
   const preferredCities = ["Cochin", "Chennai", "Sydney"];
 
-  navigator.geolocation.getCurrentPosition(async (position) => {
-    for (const city of preferredCities) {
+  navigator.geolocation.getCurrentPosition((position) => {
+    // Call the OpenWeatherMap API for each preferred city
+    preferredCities.forEach((city) => {
       const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
 
-      try {
-        const response = await fetch(apiUrl);
-        const data = await response.json();
-        const weatherCondition = data.weather[0].main.toLowerCase();
+      fetch(apiUrl)
+        .then((response) => response.json())
+        .then((data) => {
+          const weatherCondition = data.weather[0].main.toLowerCase();
+          const temperature = data.main.temp;
 
-        if (weatherCondition.includes("rain")) {
-          Swal.fire({
-            title: "Notification title",
-            text: `It's raining in ${city} (${data.main.temp}°C) and it is ${weatherCondition}`,
-            icon: "warning",
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timerProgressBar: true,
-          });
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    }
+          // Check if it's going to rain today for the current city
+          if (weatherCondition.includes("rain")) {
+            Swal.fire({
+              title: "Notification title",
+              text: `Its raining in ${city}°C and it is ${weatherCondition}`,
+              icon: "warning",
+              toast: true,
+              position: "top-end",
+              showConfirmButton: false,
+              timerProgressBar: true,
+            });
+          }
+        })
+        .catch((error) => console.error(error));
+    });
   });
 }
